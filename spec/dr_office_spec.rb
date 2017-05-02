@@ -33,4 +33,18 @@ describe(Doctor) do
     end
   end
 
+  describe('.patients') do
+    it('returns an array of all patients with dr_id equal to self.id') do
+      dr1 = Doctor.new({:id=>nil, :name=>'Steve', :spec=>'Pediatrics'})
+      dr1.save
+      patient1 = Patient.new({:name=>'Steve', :birth=>'1/1/11', :dr_id => dr1.id})
+      patient2 = Patient.new({:name=>'Steve', :birth=>'1/1/11', :dr_id => dr1.id})
+      patient3 = Patient.new({:name=>'Steve', :birth=>'1/1/11', :dr_id => 0})
+      patient1.save
+      patient2.save
+      patient3.save
+      expect(dr1.patients).to(eq([patient1, patient2]))
+    end
+  end
+
 end

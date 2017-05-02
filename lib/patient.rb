@@ -26,8 +26,4 @@ class Patient
   define_method(:save) do
     DB.exec("INSERT INTO patients (name, birth_date, doctor_id) VALUES ('#{@name}','#{@birth}','#{@dr_id}');")
   end
-
-  define_method(:add_doctor) do |patient|
-    #patient.dr_id = @id
-  end
 end

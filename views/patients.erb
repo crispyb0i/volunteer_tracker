@@ -1,0 +1,19 @@
+<h1>Patients under Dr.<%= @doctor.name %>'s care'</h1>
+
+<ul>
+  <% @patients.each() do |patient| %>
+  <li><%= patient.name %> (<%= patient.birth%>)</li>
+    <% end %>
+</ul>
+
+<h2>Add a new patient</h2>
+
+<form action="/<%= @doctor.id %>" method="post">
+  <label for="word">New Patient Name</label>
+    <input type="text" name="name">
+  <label for="word">New Patient Date of Birth</label>
+    <input type="text" name="birth">
+  <button type="submit">Add a Patient!</button>
+</form>
+<br>
+<a href="/">Home</a>
