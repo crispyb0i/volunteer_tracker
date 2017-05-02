@@ -40,13 +40,29 @@ class Doctor
 
   define_method(:patients) do
     my_patients = []
-    patients = DB.exec("SELECT * FROM patients WHERE doctor_id = #{self.id};")
-    patients.each() do |patient|
-      name = patient['name']
-      birth = patient['birth_date']
-      dr_id = patient['doctor_id']
-      my_patients.push(Patient.new({:name=>name, :birth=>birth, :dr_id=>dr_id}))
+    # patients = DB.exec("SELECT * FROM patients WHERE doctor_id = #{self.id};")
+    # patients.each() do |patient|
+    #   name = patient['name']
+    #   birth = patient['birth_date']
+    #   dr_id = patient['doctor_id']
+    #   my_patients.push(Patient.new({:name=>name, :birth=>birth, :dr_id=>dr_id}))
+    # end
+    Patient.all.each() do |patient|
+      if patient.dr_id==self.id
+        puts(patient)
+        my_patients.push(patient)
+      end
     end
     my_patients
+  end
+
+  define_singleton_method(:specs) do |spec|
+    spec_doctors = []
+    Doctor.all.each() do |doc|
+      if doc.spec == spec
+        spec_doctors.push(doc)
+      end
+    end
+    spec_doctors
   end
 end
