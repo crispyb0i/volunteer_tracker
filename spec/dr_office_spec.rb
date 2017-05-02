@@ -1,14 +1,4 @@
-require("rspec")
-require("pg")
-require("dr_office")
-
-DB = PG.connect({:dbname => 'doctors_test'})
-
-RSpec.configure do |config|
-  config.after(:each) do
-    DB.exec("DELETE FROM doctors *;")
-  end
-end
+require("spec_helper")
 
 describe(Doctor) do
   describe('#==') do
@@ -32,7 +22,15 @@ describe(Doctor) do
       expect(Doctor.all()).to(eq([dr1]))
     end
   end
-end
 
-describe(Patient) do
+  describe('.find') do
+    it('returns an object with a matching id to passed argument') do
+      dr1 = Doctor.new({:id=>nil, :name=>'Steve', :spec=>'Pediatrics'})
+      dr2 = Doctor.new({:id=>nil, :name=>'Bob', :spec=>'Pediatrics'})
+      dr1.save
+      dr2.save
+      expect(Doctor.find(dr2.id)).to(eq(dr2))
+    end
+  end
+
 end

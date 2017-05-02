@@ -1,13 +1,10 @@
 class Doctor
-  attr_accessor(:id, :name, :specialty)
+  attr_accessor(:id, :name, :spec)
   define_method(:initialize) do |attrib|
     @id = attrib[:id]
     @name = attrib[:name]
     @spec = attrib[:spec]
-    #add to database
   end
-
-  #@@doctors = []
 
   define_method(:==) do |dr2|
     self.id == dr2.id
@@ -17,40 +14,27 @@ class Doctor
     all_doctors = []
     returned_doctors = DB.exec('SELECT * FROM doctors')
     returned_doctors.each() do |doctor|
-      id = doctor[:id]
-      name = doctor[:name]
-      spec = doctor[:spec]
-      all_doctors.push(Doctor.new({:id=>id,:name=>name,:spec=>spec}))
+      id = doctor["id"].to_i
+      name = doctor["name"]
+      spec = doctor["specialty"]
+      dr_rm = Doctor.new({:id=>id,:name=>name,:spec=>spec})
+      all_doctors.push(dr_rm)
     end
     all_doctors
   end
 
   define_method(:save) do
-    DB.exec("INSERT INTO doctors (name, specialty) VALUES ('#{@name}','#{@spec}');")
+    result = DB.exec("INSERT INTO doctors (name, specialty) VALUES ('#{@name}','#{@spec}') RETURNING id;")
+    @id = result.first.fetch('id').to_i
   end
 
-  define_method(:add_patient) do |patient|
-    #patient.dr_id = @id
-  end
-
-  define_method(:find) do |id|
+  define_singleton_method(:find) do |id|
     found = nil
-    returned_doctors = DB.exec('SELECT * FROM doctors')
-    returned_doctors.each() do |doctor|
+    Doctor.all.each() do |doctor|
       if doctor.id == id
         found = doctor
       end
     end
     found
-  end
-end
-
-class Patient
-  attr_accessor(:id, :name, :birth, :dr_id)
-  define_method(:initialize) do |attrib|
-    @id = attrib[:id]
-    @name = attrib[:name]
-    @birth = attrib[:birth]
-    @dr_id = attrib[:dr_id]
   end
 end
