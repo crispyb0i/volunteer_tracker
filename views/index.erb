@@ -15,3 +15,12 @@
     <input type="text" name="specialty">
   <button type="submit">Add a doctor!</button>
 </form>
+
+<h2>List of Specialties</h2>
+<form action="/" method="post">
+  <select name="doctor_id">
+    <% @doctors.each() do |doctor| %>
+    <option value="doctor.id"><%= doctor.spec %></option>
+    <% end %>
+  </select>
+</form>

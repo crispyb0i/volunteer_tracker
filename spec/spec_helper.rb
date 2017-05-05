@@ -1,13 +1,13 @@
 require("rspec")
 require("pg")
-require("dr_office")
-require("patient")
+require("projects")
+require("volunteers")
 
-DB = PG.connect({:dbname => "doctors_test"})
+DB = PG.connect({:dbname => "volunteer_tracker_test"})
 
 RSpec.configure do |config|
   config.after(:each) do
-    DB.exec("DELETE FROM doctors *;")
-    DB.exec("DELETE FROM patients *;")
+    DB.exec("DELETE FROM projects *;")
+    DB.exec("DELETE FROM volunteers *;")
   end
 end

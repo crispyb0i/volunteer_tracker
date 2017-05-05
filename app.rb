@@ -1,39 +1,51 @@
 require('sinatra')
 require('sinatra/reloader')
-require('./lib/dr_office')
-require('./lib/Patient')
+require('./lib/project')
+require('./lib/volunteer')
 require('pry')
 also_reload('lib/**/*.rb')
 require('pg')
 
-DB = PG.connect({:dbname => 'doctors'})
+DB = PG.connect({:dbname => 'volunteer_tracker'})
 
 get('/') do
-  @doctors = Doctor.all
+  @projects = Project.all
   erb(:index)
 end
 
 post('/') do
-  dr_name = params.fetch('name')
-  dr_specialty = params.fetch('specialty')
-  new_doctor = Doctor.new({:id => nil, :name => dr_name, :spec => dr_specialty})
-  new_doctor.save
-  @doctors = Doctor.all
+  project_name = params.fetch('name')
+  new_project = Project.new({:id => nil, :name => project_name})
+  new_project.save
+  @projects = Project.all
   erb(:index)
 end
 
 get('/:id') do
-  @doctor = Doctor.find(params[:id].to_i)
-  @patients = Patient.all
+  @project = Project.find(params[:id].to_i)
+  @patients = Volunteer.all
   erb(:patients)
 end
 
 post('/:id') do
-  @doctor = Doctor.find(params[:id].to_i)
+  @project = Project.find(params[:id].to_i)
   patient_name = params.fetch('name')
   patient_birth = params.fetch('birth')
-  new_patient = Patient.new({:name => patient_name, :birth => patient_birth, :dr_id=>@doctor.id})
+  new_patient = Volunteer.new({:name => patient_name, :birth => patient_birth, :project_id=>@project.id})
   new_patient.save
-  @patients = Patient.all
+  @patients = Volunteer.all
+  erb(:patients)
+end
+
+patch('/:id') do
+  @project = Project.find(params[:id].to_i)
+  @project.update({:name=>params[:update_name], :specialty=>params[:update_specialty]})
+  erb(:patients)
+end
+
+delete('/:id') do
+  @project = Project.find(params[:id].to_i)
+  @patients = Volunteer.all
+  DB.exec("DELETE FROM patients WHERE name = #{params[:patient_id]};")
   erb(:patients)
 end
