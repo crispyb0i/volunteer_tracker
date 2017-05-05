@@ -23,6 +23,14 @@ describe(Project) do
     end
   end
 
+  describe("#save") do
+    it("adds a project to the database of saved volunteers") do
+      vol1 = Volunteer.new({:id=>nil, :name=>'Steve', :project_id => 3})
+      vol1.save()
+      expect(Volunteer.all()).to(eq([vol1]))
+    end
+  end
+
   describe('.find') do
     it('returns an object with a matching id to passed argument') do
       pr1 = Project.new({:id=>nil, :name=>'Dark Hole'})

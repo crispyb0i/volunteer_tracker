@@ -2,9 +2,9 @@
 
 <ul>
   <% @volunteers.each() do |volunteer| %>
-    <% if volunteer.project_id == @project.id %>
+
       <li><%= volunteer.name %></li>
-    <% end %>
+
   <% end %>
 </ul>
 
@@ -12,24 +12,22 @@
 
 <form action="/<%= @project.id %>" method="post">
   <label for="word">New Volunteer Name</label>
-    <input type="text" name="name">
+    <input type="text" name="name" required>
   <button type="submit">Add a Volunteer!</button>
 </form>
 <br>
-
+<h2>Remove a volunteer</h2>
 <form action="/<%= @project.id %>" method="post">
   <input type="hidden" name="_method" value="delete">
-  <select name="volunteer_id">
+  <select name='delete_name'>
     <% @volunteers.each() do |volunteer| %>
-      <% if volunteer.project_id == @doctor.id %>
-        <option value= '<%volunteer.name%>'><%= volunteer.name %></option>
-      <% end %>
+      <option value='<%=volunteer.id%>'><%=volunteer.name%></option>
     <% end %>
   </select>
-  <button type="submit" name="button">remove a volunteer</button>
+  <button type="submit">Remove volunteer</button>
 </form>
 <br>
-
+<h2>Update project name</h2>
 <form action="/<%= @project.id %>" method="post">
   <input type="hidden" name="_method" value="patch">
   <div class="form-group">

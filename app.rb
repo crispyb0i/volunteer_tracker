@@ -30,13 +30,15 @@ end
 post('/:id') do
   @project = Project.find(params[:id].to_i)
   volunteer_name = params.fetch('name')
-  new_volunteer = Volunteer.new({:name => volunteer_name, :project_id=>@project.id})
+  new_volunteer = Volunteer.new({:name => volunteer_name, :project_id => @project.id})
   new_volunteer.save
   @volunteers = Volunteer.all
+  binding.pry
   erb(:volunteers)
 end
 
 patch('/:id') do
+  @volunteers = Volunteer.all
   @project = Project.find(params[:id].to_i)
   @project.update({:name=>params[:update_name]})
   erb(:volunteers)
@@ -45,6 +47,16 @@ end
 delete('/:id') do
   @project = Project.find(params[:id].to_i)
   @volunteers = Volunteer.all
-  DB.exec("DELETE FROM volunteers WHERE name = #{params[:volunteer_id]};")
+  id = params.fetch("delete_name")
+  @volunteer =  Volunteer.find(id)
+  DB.exec("DELETE FROM volunteers WHERE id = #{id};")
+  erb(:volunteers)
+end
+
+delete ('/projects/:id') do
+  id = params.fetch("id").to_i()
+  @project = Project.find(id)
+  DB.exec("DELETE FROM volunteers WHERE id = #{self.id()};")
+  @projects = Project.all()
   erb(:volunteers)
 end
