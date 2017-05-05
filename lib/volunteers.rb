@@ -3,7 +3,7 @@ class Volunteer
   define_method(:initialize) do |attrib|
     @id = attrib[:id]
     @name = attrib[:name]
-    @project_id = attrib[:@project_id]
+    @project_id = attrib[:@project_id].to_i
   end
 
   define_method(:==) do |volunteer2|
@@ -16,8 +16,8 @@ class Volunteer
     returned_volunteers.each() do |volunteer|
       id = volunteer["id"].to_i
       name = volunteer["name"]
-      dr_rm = Volunteer.new({:id=>id,:name=>name,:spec=>spec})
-      all_volunteers.push(dr_rm)
+      volunteer_rm = Volunteer.new({:id=>id,:name=>name})
+      all_volunteers.push(volunteer_rm)
     end
     all_volunteers
   end
@@ -50,5 +50,10 @@ class Volunteer
   define_method(:update) do |attrib|
     @name = attrib.fetch(:name)
     DB.exec("UPDATE volunteers SET name='#{@name}' WHERE id='#{self.id}'")
+  end
+
+
+  define_method(:delete) do
+    DB.exec("DELETE FROM volunteers WHERE id = #{self.id()};")
   end
 end

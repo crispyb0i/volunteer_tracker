@@ -1,26 +1,15 @@
-<h1>Doctors on Staff</h1>
+<h1>List of current projects</h1>
 
 <ul>
-  <% @doctors.each() do |doctor| %>
-  <li><a href="/<%= doctor.id %>"><%= doctor.name %></a></li>
+  <% @projects.each() do |project| %>
+  <li><a href="/<%= project.id %>"><%= project.name %></a></li>
     <% end %>
 </ul>
 
-<h2>Add a new doctor</h2>
+<h2>Add a new project</h2>
 
 <form action="/" method="post">
-  <label for="word">New Doctor Name</label>
-    <input type="text" name="name">
-  <label for="word">New Doctor Specialty</label>
-    <input type="text" name="specialty">
-  <button type="submit">Add a doctor!</button>
-</form>
-
-<h2>List of Specialties</h2>
-<form action="/" method="post">
-  <select name="doctor_id">
-    <% @doctors.each() do |doctor| %>
-    <option value="doctor.id"><%= doctor.spec %></option>
-    <% end %>
-  </select>
+  <label for="word">New Project Name</label>
+    <input type="text" name="project_name">
+  <button type="submit">Add a project!</button>
 </form>

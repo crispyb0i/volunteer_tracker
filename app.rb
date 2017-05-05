@@ -1,7 +1,7 @@
 require('sinatra')
 require('sinatra/reloader')
-require('./lib/project')
-require('./lib/volunteer')
+require('./lib/projects')
+require('./lib/volunteers')
 require('pry')
 also_reload('lib/**/*.rb')
 require('pg')
@@ -14,7 +14,7 @@ get('/') do
 end
 
 post('/') do
-  project_name = params.fetch('name')
+  project_name = params.fetch('project_name')
   new_project = Project.new({:id => nil, :name => project_name})
   new_project.save
   @projects = Project.all
@@ -23,29 +23,28 @@ end
 
 get('/:id') do
   @project = Project.find(params[:id].to_i)
-  @patients = Volunteer.all
-  erb(:patients)
+  @volunteers = Volunteer.all
+  erb(:volunteers)
 end
 
 post('/:id') do
   @project = Project.find(params[:id].to_i)
-  patient_name = params.fetch('name')
-  patient_birth = params.fetch('birth')
-  new_patient = Volunteer.new({:name => patient_name, :birth => patient_birth, :project_id=>@project.id})
-  new_patient.save
-  @patients = Volunteer.all
-  erb(:patients)
+  volunteer_name = params.fetch('name')
+  new_volunteer = Volunteer.new({:name => volunteer_name, :project_id=>@project.id})
+  new_volunteer.save
+  @volunteers = Volunteer.all
+  erb(:volunteers)
 end
 
 patch('/:id') do
   @project = Project.find(params[:id].to_i)
-  @project.update({:name=>params[:update_name], :specialty=>params[:update_specialty]})
-  erb(:patients)
+  @project.update({:name=>params[:update_name]})
+  erb(:volunteers)
 end
 
 delete('/:id') do
   @project = Project.find(params[:id].to_i)
-  @patients = Volunteer.all
-  DB.exec("DELETE FROM patients WHERE name = #{params[:patient_id]};")
-  erb(:patients)
+  @volunteers = Volunteer.all
+  DB.exec("DELETE FROM volunteers WHERE name = #{params[:volunteer_id]};")
+  erb(:volunteers)
 end
