@@ -13,3 +13,14 @@
     <input type="text" name="project_name">
   <button type="submit">Add a project!</button>
 </form>
+
+<h2>Delete a project</h2>
+<form action="/" method="post">
+  <input type="hidden" name="_method" value="delete">
+  <select name='delete_project'>
+    <% @projects.each() do |project| %>
+      <option value='<%=project.id%>'><%=project.name%></option>
+    <% end %>
+  </select>
+  <button type="submit">Remove project</button>
+</form>

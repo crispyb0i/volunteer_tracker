@@ -15,8 +15,8 @@ class Project
     returned_projects.each() do |project|
       id = project["id"].to_i
       name = project["name"]
-      dr_rm = Project.new({:id=>id,:name=>name})
-      all_projects.push(dr_rm)
+      pr_rm = Project.new({:id=>id,:name=>name})
+      all_projects.push(pr_rm)
     end
     all_projects
   end

@@ -3,7 +3,7 @@
 <ul>
   <% @volunteers.each() do |volunteer| %>
 
-      <li><%= volunteer.name %></li>
+      <li><a href="/volunteer/<%= volunteer.id %>"><%= volunteer.name %></a></li>
 
   <% end %>
 </ul>
@@ -21,7 +21,9 @@
   <input type="hidden" name="_method" value="delete">
   <select name='delete_name'>
     <% @volunteers.each() do |volunteer| %>
-      <option value='<%=volunteer.id%>'><%=volunteer.name%></option>
+      <% if volunteer.project_id == @project.id %>
+        <option value='<%=volunteer.id%>'><%=volunteer.name%></option>
+      <% end %>
     <% end %>
   </select>
   <button type="submit">Remove volunteer</button>

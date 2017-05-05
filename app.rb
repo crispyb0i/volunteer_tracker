@@ -7,6 +7,8 @@ also_reload('lib/**/*.rb')
 require('pg')
 
 DB = PG.connect({:dbname => 'volunteer_tracker'})
+# DB.exec("DELETE FROM projects *;")
+# DB.exec("DELETE FROM volunteers *;")
 
 get('/') do
   @projects = Project.all
@@ -21,6 +23,14 @@ post('/') do
   erb(:index)
 end
 
+delete ('/') do
+  id = params.fetch("delete_project").to_i()
+  @project = Project.find(id)
+  DB.exec("DELETE FROM projects WHERE id = #{id};")
+  @projects = Project.all()
+  erb(:index)
+end
+
 get('/:id') do
   @project = Project.find(params[:id].to_i)
   @volunteers = Volunteer.all
@@ -30,10 +40,9 @@ end
 post('/:id') do
   @project = Project.find(params[:id].to_i)
   volunteer_name = params.fetch('name')
-  new_volunteer = Volunteer.new({:name => volunteer_name, :project_id => @project.id})
-  new_volunteer.save
+  new_volunteer = Volunteer.new({:id => nil, :name => volunteer_name, :project_id => @project.id})
   @volunteers = Volunteer.all
-  binding.pry
+  new_volunteer.save
   erb(:volunteers)
 end
 
@@ -47,9 +56,9 @@ end
 delete('/:id') do
   @project = Project.find(params[:id].to_i)
   @volunteers = Volunteer.all
-  id = params.fetch("delete_name")
+  id_yes = params[:delete_name]
   @volunteer =  Volunteer.find(id)
-  DB.exec("DELETE FROM volunteers WHERE id = #{id};")
+  DB.exec("DELETE FROM volunteers WHERE id = #{id_yes};")
   erb(:volunteers)
 end
 
@@ -59,4 +68,25 @@ delete ('/projects/:id') do
   DB.exec("DELETE FROM volunteers WHERE id = #{self.id()};")
   @projects = Project.all()
   erb(:volunteers)
+end
+
+get ('/volunteer/:id') do
+  @project = Project.find(params[:id].to_i)
+  @volunteer = Volunteer.find(params[:id].to_i)
+    @projects = Project.all
+  erb(:update_volunteer_name)
+end
+
+patch ('/volunteer/:id') do
+  @volunteer = Volunteer.find(params[:id].to_i)
+  @volunteer.update({:name=>params[:update_name]})
+  @projects = Project.all
+  @project = Project.find(params[:id].to_i)
+  erb(:index)
+end
+
+post ('/volunteer/:id') do
+  @volunteers = Volunteer.all
+  @project = Project.find(params[:id].to_i)
+  erb(:index)
 end

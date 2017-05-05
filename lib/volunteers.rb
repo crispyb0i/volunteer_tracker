@@ -16,7 +16,8 @@ class Volunteer
     returned_volunteers.each() do |volunteer|
       id = volunteer["id"].to_i
       name = volunteer["name"]
-      volunteer_rm = Volunteer.new({:id=>id,:name=>name})
+      project_id = volunteer["project_id"]
+      volunteer_rm = Volunteer.new({:id=>id,:name=>name,:project_id => project_id})
       all_volunteers.push(volunteer_rm)
     end
     all_volunteers
@@ -36,16 +37,6 @@ class Volunteer
     end
     found
   end
-
-  # define_method(:volunteers) do
-  #   volunteer_volunteers = []
-  #   Volunteer.all.each() do |volunteer|
-  #     if volunteer.volunteer_id==self.id
-  #       volunteer_volunteers.push(volunteer)
-  #     end
-  #   end
-  #   volunteer_volunteers
-  # end
 
   define_method(:update) do |attrib|
     @name = attrib.fetch(:name)
