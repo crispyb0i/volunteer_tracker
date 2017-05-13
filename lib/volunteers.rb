@@ -3,7 +3,7 @@ class Volunteer
   define_method(:initialize) do |attrib|
     @id = attrib[:id]
     @name = attrib[:name]
-    @project_id = attrib[:@project_id].to_i
+    @project_id = attrib[:project_id].to_i
   end
 
   define_method(:==) do |volunteer2|

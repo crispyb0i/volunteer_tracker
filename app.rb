@@ -57,6 +57,7 @@ delete('/:id') do
   @project = Project.find(params[:id].to_i)
   @volunteers = Volunteer.all
   id_yes = params[:delete_name]
+  id = params.fetch("id").to_i()
   @volunteer =  Volunteer.find(id)
   DB.exec("DELETE FROM volunteers WHERE id = #{id_yes};")
   erb(:volunteers)
